@@ -32,6 +32,11 @@ public class AppUserController {
         appUserService.deleteById(id);
     }
 
+    @DeleteMapping("/deleteByChatId/{id}")
+    public void deleteByChatId(@PathVariable("id") Long id) {
+        appUserService.deleteByChatId(id);
+    }
+
     @GetMapping("/getAllUsersByPages")
     public ResponseEntity<PageDto> getAllUsersByPages(@RequestParam(value = "pageNumber", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNumber,
                                                       @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,

@@ -53,7 +53,9 @@ public class Bot extends TelegramLongPollingBot {
                             + "MessageId: " + message.getMessageId()
                             + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText(message.getFrom().getUserName() + " you are subscribed and if you want to unsubscribe from our service press to unsubscribe button ");
+//                    sendMessage.setText(message.getFrom().getUserName() +
+//                    " you are subscribed and if you want to unsubscribe from our service press to unsubscribe button ");
+                    sendMessage.setText(message.getFrom().getUserName() + " type your question");
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
                     try {
@@ -62,12 +64,12 @@ public class Bot extends TelegramLongPollingBot {
                         log.info(e + "Message");
                     }
                 } else  if (text.equals("/unsubscribe")) {
-                    appUserService.deleteByChatId(message.getChatId());
+//                    appUserService.deleteByChatId(message.getChatId());
                     log.info("We've got a message: "
                             + "MessageId: " + message.getMessageId()
                             + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
+//                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
                     try {
