@@ -1,15 +1,14 @@
 package kz.almaty.telegrambotspringboot.bot;
 
-import kz.almaty.telegrambotspringboot.enums.UserState;
-import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
-import kz.almaty.telegrambotspringboot.model.AppUser;
-import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
+
+import kz.almaty.telegrambotspringboot.dto.ChatGptRequest;
+import kz.almaty.telegrambotspringboot.dto.ChatGptResponse;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -17,17 +16,16 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Optional;
 
 @Slf4j
 @Component
 public class Bot extends TelegramLongPollingBot {
 
     @Autowired
-    private AppUserRepository userRepository;
+    private AppUserService appUserService;
 
     @Autowired
-    private AppUserService appUserService;
+    private RestTemplate restTemplate;
 
     public Bot(@Value("${bot.token}") String token) {
         super(token);
@@ -40,6 +38,23 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotUsername() {
         return username;
     }
+
+    @Value("${openai.model}")
+    private String model;
+
+    @Value("${open.api.url}")
+    private String apiURL;
+
+    @Value("${openai,api.key}")
+    private String key;
+
+    private String chatGptResponse(String prompt) {
+        ChatGptRequest chatGptRequest = new ChatGptRequest(model, prompt);
+        ChatGptResponse chatGptResponse = restTemplate.postForObject(apiURL, chatGptRequest, ChatGptResponse.class);
+        assert chatGptResponse != null;
+        return chatGptResponse.getChoices().get(0).getMessage().getContent();
+    }
+
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -63,13 +78,14 @@ public class Bot extends TelegramLongPollingBot {
                     } catch (TelegramApiException e) {
                         log.info(e + "Message");
                     }
-                } else  if (text.equals("/unsubscribe")) {
+                } else  if (message.hasText()) {
 //                    appUserService.deleteByChatId(message.getChatId());
                     log.info("We've got a message: "
                             + "MessageId: " + message.getMessageId()
                             + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
 //                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
+                    sendMessage.setText(chatGptResponse(text));
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
                     try {
