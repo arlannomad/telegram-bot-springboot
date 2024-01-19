@@ -1,8 +1,10 @@
 package kz.almaty.telegrambotspringboot.service.impl;
 
+import kz.almaty.telegrambotspringboot.dto.AppUserDto;
 import kz.almaty.telegrambotspringboot.dto.PageDto;
 import kz.almaty.telegrambotspringboot.enums.UserState;
 import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
+import kz.almaty.telegrambotspringboot.mapper.AppUserMapper;
 import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
@@ -27,9 +29,10 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository userRepository;
 
     @Override
-    public AppUser findAppUserByTelegramUserId(Long id) {
-        return userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
+    public AppUserDto findAppUserByTelegramUserId(Long id) {
+        AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+        return AppUserMapper.mapToDto(appUser);
     }
 
     @Override
@@ -57,11 +60,11 @@ public class AppUserServiceImpl implements AppUserService {
                 .build();
     }
 
-
     @Override
-    public AppUser findById(Long id) {
-            return userRepository.findById(id).orElseThrow(()
-                    -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+    public AppUserDto findById(Long id) {
+        AppUser appUser = userRepository.findById(id).orElseThrow(()
+                -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+        return AppUserMapper.mapToDto(appUser);
     }
 
     @Override
@@ -74,7 +77,7 @@ public class AppUserServiceImpl implements AppUserService {
 
             AppUser appUser = new AppUser();
             appUser.setTelegramUserId(chatId);
-            appUser.setFirstname(chat.getFirstName());
+            appUser.setFirstName(chat.getFirstName());
             appUser.setLastName(chat.getLastName());
             appUser.setUsername(chat.getUserName());
             appUser.setIsActive(true);

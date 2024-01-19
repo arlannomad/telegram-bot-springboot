@@ -1,6 +1,7 @@
 package kz.almaty.telegrambotspringboot.controller;
 
 import jakarta.ws.rs.Path;
+import kz.almaty.telegrambotspringboot.dto.AppUserDto;
 import kz.almaty.telegrambotspringboot.dto.PageDto;
 import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
@@ -22,7 +23,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @GetMapping("/findAppUserByTelegramUserId/{id}")
-    public AppUser findAppUserByTelegramUserId(@PathVariable("id") Long id) {
+    public AppUserDto findAppUserByTelegramUserId(@PathVariable("id") Long id) {
         return appUserService.findAppUserByTelegramUserId(id);
     }
 
@@ -40,7 +41,7 @@ public class AppUserController {
     }
 
     @GetMapping("/findById/{id}")
-    public AppUser findById(@PathVariable("id") Long id) {
+    public AppUserDto findById(@PathVariable("id") Long id) {
         return appUserService.findById(id);
     }
 
