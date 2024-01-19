@@ -48,12 +48,11 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 String text = message.getText();
                 if (text.equals("/start")) {
-                    register(update.getMessage());
+                    appUserService.register(update.getMessage());
                     log.info("We've got a message: "
                             + "MessageId: " + message.getMessageId()
                             + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
-//                    sendMessage.setText("Response for /start you can put here yoy text message");
                     sendMessage.setText(message.getFrom().getUserName() + " you are subscribed and if you want to unsubscribe from our service press to unsubscribe button ");
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
@@ -63,12 +62,12 @@ public class Bot extends TelegramLongPollingBot {
                         log.info(e + "Message");
                     }
                 } else  if (text.equals("/unsubscribe")) {
-                    unsubscribe(update.getMessage());
+                    appUserService.deleteByChatId(message.getChatId());
                     log.info("We've got a message: "
                             + "MessageId: " + message.getMessageId()
                             + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText("Response for /start you can put here yoy text message");
+                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
                     try {
@@ -81,29 +80,4 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void unsubscribe(Message message) {
-        if (userRepository.findAppUserByTelegramUserId(message.getChatId()).isPresent()) {
-            throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User with chatId " + message.getChatId() + " NOT FOUND");
-        } else {
-            userRepository.findById(message.getChatId());
-        }
-    }
-
-    private void register(Message message) {
-        if (userRepository.findAppUserByTelegramUserId(message.getChatId()).isPresent()) {
-            throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User " + message.getFrom() + " already registered");
-        } else {
-            var chatId = message.getChatId();
-            var chat = message.getChat();
-
-            AppUser appUser = new AppUser();
-            appUser.setTelegramUserId(chatId);
-            appUser.setFirstname(chat.getFirstName());
-            appUser.setLastName(chat.getLastName());
-            appUser.setUsername(chat.getUserName());
-            appUser.setIsActive(true);
-            appUser.setState(UserState.SUBSCRIBED);
-            userRepository.save(appUser);
-        }
-    }
 }
