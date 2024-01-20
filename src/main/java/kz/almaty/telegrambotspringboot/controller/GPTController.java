@@ -19,9 +19,6 @@ public class GPTController {
     @Value("${open.api.url}")
     private String apiURL;
 
-    @Value("${openai,api.key}")
-    private String key;
-
     @Autowired
     private RestTemplate restTemplate;
 

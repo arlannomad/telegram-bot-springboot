@@ -1,17 +1,15 @@
 package kz.almaty.telegrambotspringboot.controller;
 
-import jakarta.ws.rs.Path;
+
 import kz.almaty.telegrambotspringboot.dto.AppUserDto;
 import kz.almaty.telegrambotspringboot.dto.PageDto;
-import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.List;
+
 
 import static kz.almaty.telegrambotspringboot.utils.AppConstants.*;
 

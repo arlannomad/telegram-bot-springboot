@@ -45,9 +45,6 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${open.api.url}")
     private String apiURL;
 
-    @Value("${openai,api.key}")
-    private String key;
-
     private String chatGptResponse(String prompt) {
         ChatGptRequest chatGptRequest = new ChatGptRequest(model, prompt);
         ChatGptResponse chatGptResponse = restTemplate.postForObject(apiURL, chatGptRequest, ChatGptResponse.class);
@@ -80,9 +77,6 @@ public class Bot extends TelegramLongPollingBot {
                     }
                 } else  if (message.hasText()) {
 //                    appUserService.deleteByChatId(message.getChatId());
-                    log.info("We've got a message: "
-                            + "MessageId: " + message.getMessageId()
-                            + " ChatId " + message.getChatId());
                     SendMessage sendMessage = new SendMessage();
 //                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
                     sendMessage.setText(chatGptResponse(text));
