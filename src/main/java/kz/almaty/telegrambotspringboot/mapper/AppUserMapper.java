@@ -14,6 +14,7 @@ public class AppUserMapper {
                 .username(appUser.getUsername())
                 .isActive(true)
                 .state(UserState.SUBSCRIBED)
+                .telegramUserMessages(appUser.getTelegramUserMessages())
                 .build();
     }
 
@@ -26,6 +27,7 @@ public class AppUserMapper {
                 .username(appUserDto.getUsername())
                 .isActive(true)
                 .state(UserState.SUBSCRIBED)
+                .telegramUserMessages(appUserDto.getTelegramUserMessages())
                 .build();
     }
 }

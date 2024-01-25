@@ -2,10 +2,13 @@ package kz.almaty.telegrambotspringboot.dto;
 
 
 import kz.almaty.telegrambotspringboot.enums.UserState;
+import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Data
@@ -20,4 +23,5 @@ public class AppUserDto {
     private String username;
     private Boolean isActive;
     private UserState state;
+    private List<TelegramUserMessage> telegramUserMessages;
 }

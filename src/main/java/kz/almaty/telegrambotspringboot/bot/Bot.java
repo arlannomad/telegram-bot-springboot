@@ -3,7 +3,9 @@ package kz.almaty.telegrambotspringboot.bot;
 
 import kz.almaty.telegrambotspringboot.dto.ChatGptRequest;
 import kz.almaty.telegrambotspringboot.dto.ChatGptResponse;
+import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
+import kz.almaty.telegrambotspringboot.service.TelegramUserMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,9 @@ public class Bot extends TelegramLongPollingBot {
 
     @Autowired
     private AppUserService appUserService;
+
+    @Autowired
+    private TelegramUserMessageService telegramUserMessageService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -76,9 +81,10 @@ public class Bot extends TelegramLongPollingBot {
                         log.info(e + "Message");
                     }
                 } else  if (message.hasText()) {
+                    TelegramUserMessage userMessage = new TelegramUserMessage();
 //                    appUserService.deleteByChatId(message.getChatId());
+                    telegramUserMessageService.addMessage(message);
                     SendMessage sendMessage = new SendMessage();
-//                    sendMessage.setText("Response for /unsubscribe you can put here yoy text message");
                     sendMessage.setText(chatGptResponse(text));
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
