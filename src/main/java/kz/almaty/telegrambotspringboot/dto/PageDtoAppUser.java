@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageDto {
+public class PageDtoAppUser {
     private List<AppUser> content;
     private int pageNumber;
     private int pageSize;

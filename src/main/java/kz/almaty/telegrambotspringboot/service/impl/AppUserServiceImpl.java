@@ -1,7 +1,7 @@
 package kz.almaty.telegrambotspringboot.service.impl;
 
 import kz.almaty.telegrambotspringboot.dto.AppUserDto;
-import kz.almaty.telegrambotspringboot.dto.PageDto;
+import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
 import kz.almaty.telegrambotspringboot.enums.UserState;
 import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
 import kz.almaty.telegrambotspringboot.mapper.AppUserMapper;
@@ -43,20 +43,20 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public PageDto getAllUsersByPages(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+    public PageDtoAppUser getAllUsersByPages(int pageNumber, int pageSize, String sortBy, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<AppUser> posts = userRepository.findAll(pageable);
+        Page<AppUser> appUsers = userRepository.findAll(pageable);
         List<AppUser> content = userRepository.findAll();
-        return PageDto.builder()
+        return PageDtoAppUser.builder()
                 .content(content)
-                .pageNumber(posts.getNumber())
-                .pageSize(posts.getSize())
-                .pageSize(posts.getSize())
-                .totalElements(posts.getTotalElements())
-                .totalPages(posts.getTotalPages())
-                .last(posts.isLast())
+                .pageNumber(appUsers.getNumber())
+                .pageSize(appUsers.getSize())
+                .pageSize(appUsers.getSize())
+                .totalElements(appUsers.getTotalElements())
+                .totalPages(appUsers.getTotalPages())
+                .last(appUsers.isLast())
                 .build();
     }
 

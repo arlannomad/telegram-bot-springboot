@@ -1,15 +1,22 @@
 package kz.almaty.telegrambotspringboot.service.impl;
 
+import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
+import kz.almaty.telegrambotspringboot.dto.PageDtoTelegramUserMessage;
 import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
-import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
 import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
 import kz.almaty.telegrambotspringboot.service.TelegramUserMessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +50,24 @@ public class TelegramUserMessageServiceImpl implements TelegramUserMessageServic
         userMessage.setTelegramUserId(message.getChatId());
         userMessage.setTelegramUserId(message.getFrom().getId());
         telegramUserMessageRepository.save(userMessage);
+    }
+
+    @Override
+    public PageDtoTelegramUserMessage getAllUMessagesByPages(int pageNumber, int pageSize, String sortBy, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<TelegramUserMessage> messages = telegramUserMessageRepository.findAll(pageable);
+        List<TelegramUserMessage> content = telegramUserMessageRepository.findAll();
+        return PageDtoTelegramUserMessage.builder()
+                .content(content)
+                .pageNumber(messages.getNumber())
+                .pageSize(messages.getSize())
+                .pageSize(messages.getSize())
+                .totalElements(messages.getTotalElements())
+                .totalPages(messages.getTotalPages())
+                .last(messages.isLast())
+                .build();
     }
 
 }

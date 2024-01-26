@@ -2,7 +2,7 @@ package kz.almaty.telegrambotspringboot.controller;
 
 
 import kz.almaty.telegrambotspringboot.dto.AppUserDto;
-import kz.almaty.telegrambotspringboot.dto.PageDto;
+import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,10 +36,10 @@ public class AppUserController {
     }
 
     @GetMapping("/getAllUsersByPages")
-    public ResponseEntity<PageDto> getAllUsersByPages(@RequestParam(value = "pageNumber", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNumber,
-                                                      @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
-                                                      @RequestParam(value = "sortBy", defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
-                                                      @RequestParam(value = "sortDirection", defaultValue = DEFAULT_SORT_DIRECTION, required = false) String sortDirection) {
+    public ResponseEntity<PageDtoAppUser> getAllUsersByPages(@RequestParam(value = "pageNumber", defaultValue = DEFAULT_PAGE_NUMBER, required = false) int pageNumber,
+                                                             @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize,
+                                                             @RequestParam(value = "sortBy", defaultValue = DEFAULT_SORT_BY, required = false) String sortBy,
+                                                             @RequestParam(value = "sortDirection", defaultValue = DEFAULT_SORT_DIRECTION, required = false) String sortDirection) {
         return new ResponseEntity<>(appUserService.getAllUsersByPages(pageNumber, pageSize, sortBy, sortDirection), HttpStatus.OK);
     }
 
