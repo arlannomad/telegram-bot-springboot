@@ -3,12 +3,16 @@ package kz.almaty.telegrambotspringboot.bot;
 
 import kz.almaty.telegrambotspringboot.dto.ChatGptRequest;
 import kz.almaty.telegrambotspringboot.dto.ChatGptResponse;
+import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
 import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
+import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
+import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import kz.almaty.telegrambotspringboot.service.TelegramUserMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -27,7 +31,13 @@ public class Bot extends TelegramLongPollingBot {
     private AppUserService appUserService;
 
     @Autowired
+    private AppUserRepository appUserRepository;
+
+    @Autowired
     private TelegramUserMessageService telegramUserMessageService;
+
+    @Autowired
+    private TelegramUserMessageRepository telegramUserMessageRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -86,6 +96,7 @@ public class Bot extends TelegramLongPollingBot {
                     telegramUserMessageService.addMessage(message);
                     SendMessage sendMessage = new SendMessage();
                     sendMessage.setText(chatGptResponse(text));
+                    addChatGptResponseText(message);
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
                     try {
@@ -96,6 +107,18 @@ public class Bot extends TelegramLongPollingBot {
                 }
             }
         }
+    }
+
+    private void addChatGptResponseText(Message message) {
+        boolean isChatIdExists = appUserRepository.existsAppUsersByTelegramUserId(message.getChatId());
+        if (!isChatIdExists) {
+            throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User " + message.getChatId() + " NOT FOUND");
+        }
+        appUserRepository.findAppUserByTelegramUserId(message.getChatId()).get();
+        TelegramUserMessage userMessage = new TelegramUserMessage();
+        userMessage.setTelegramUserMessageResponse(chatGptResponse(message.getText()));
+        userMessage.setTelegramUserId(message.getFrom().getId());
+        telegramUserMessageRepository.save(userMessage);
     }
 
 }

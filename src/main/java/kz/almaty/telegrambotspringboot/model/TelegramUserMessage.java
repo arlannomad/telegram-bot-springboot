@@ -23,7 +23,9 @@ public class TelegramUserMessage {
     private Long telegramUserId;
     @CreationTimestamp
     private LocalDateTime messageTime;
-    @Column(length = 500)
-    private String telegramUserMessage;
+    @Column(columnDefinition = "TEXT")
+    private String telegramUserMessageRequest;
+    @Column(columnDefinition = "TEXT")
+    private String telegramUserMessageResponse;
 }
 

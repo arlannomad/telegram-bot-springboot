@@ -25,7 +25,21 @@ public class TelegramUserMessageServiceImpl implements TelegramUserMessageServic
         }
         appUserRepository.findAppUserByTelegramUserId(message.getChatId()).get();
         TelegramUserMessage userMessage = new TelegramUserMessage();
-        userMessage.setTelegramUserMessage(message.getText());
+        userMessage.setTelegramUserMessageRequest(message.getText());
+        userMessage.setTelegramUserId(message.getChatId());
+        userMessage.setTelegramUserId(message.getFrom().getId());
+        telegramUserMessageRepository.save(userMessage);
+    }
+
+    @Override
+    public void addChatGptResponseText(Message message) {
+        boolean isChatIdExists = appUserRepository.existsAppUsersByTelegramUserId(message.getChatId());
+        if (!isChatIdExists) {
+            throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User " + message.getChatId() + " NOT FOUND");
+        }
+        appUserRepository.findAppUserByTelegramUserId(message.getChatId()).get();
+        TelegramUserMessage userMessage = new TelegramUserMessage();
+        userMessage.setTelegramUserMessageRequest(message.getText());
         userMessage.setTelegramUserId(message.getChatId());
         userMessage.setTelegramUserId(message.getFrom().getId());
         telegramUserMessageRepository.save(userMessage);
