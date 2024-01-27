@@ -2,7 +2,9 @@ package kz.almaty.telegrambotspringboot.service.impl;
 
 import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
 import kz.almaty.telegrambotspringboot.dto.PageDtoTelegramUserMessage;
+import kz.almaty.telegrambotspringboot.enums.UserState;
 import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
+import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
 import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +71,11 @@ public class TelegramUserMessageServiceImpl implements TelegramUserMessageServic
                 .totalPages(messages.getTotalPages())
                 .last(messages.isLast())
                 .build();
+    }
+
+    @Override
+    public List<TelegramUserMessage> findAllByTelegramUserId(Long id) {
+        return telegramUserMessageRepository.findAllByTelegramUserId(id);
     }
 
 }

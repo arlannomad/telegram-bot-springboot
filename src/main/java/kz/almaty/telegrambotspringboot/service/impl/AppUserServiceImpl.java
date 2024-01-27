@@ -7,6 +7,7 @@ import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
 import kz.almaty.telegrambotspringboot.mapper.AppUserMapper;
 import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
+import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Getter
 @Service
 @RequiredArgsConstructor
-public class AppUserServiceImpl implements AppUserService {
+public class  AppUserServiceImpl implements AppUserService {
 
     private final AppUserRepository userRepository;
+    private final TelegramUserMessageRepository telegramUserMessageRepository;
 
     @Override
     public AppUserDto findAppUserByTelegramUserId(Long id) {

@@ -1,7 +1,6 @@
 package kz.almaty.telegrambotspringboot.model;
 
 import jakarta.persistence.*;
-import kz.almaty.telegrambotspringboot.enums.UserState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +26,8 @@ public class TelegramUserMessage {
     private String telegramUserMessageRequest;
     @Column(columnDefinition = "TEXT")
     private String telegramUserMessageResponse;
+    @ManyToOne
+    @JoinColumn(name = "message_id")
+    private AppUser user;
 }
 
