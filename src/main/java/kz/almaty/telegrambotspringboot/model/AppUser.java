@@ -31,7 +31,7 @@ public class AppUser {
     private Boolean isActive;
     @Enumerated(EnumType.STRING)
     private UserState state;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<TelegramUserMessage> telegramUserMessages;
 }
