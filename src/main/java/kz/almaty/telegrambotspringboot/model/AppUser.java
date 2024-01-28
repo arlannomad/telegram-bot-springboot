@@ -32,7 +32,6 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private UserState state;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_messages_id", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "message_id", referencedColumnName = "id"))
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<TelegramUserMessage> telegramUserMessages;
 }

@@ -31,12 +31,22 @@ public class  AppUserServiceImpl implements AppUserService {
     private final AppUserRepository userRepository;
     private final TelegramUserMessageRepository telegramUserMessageRepository;
 
+//    @Override
+//    public AppUserDto findAppUserByTelegramUserId(Long id) {
+//        AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
+//                -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+//        return AppUserMapper.mapToDto(appUser);
+//    }
+
+
     @Override
     public AppUserDto findAppUserByTelegramUserId(Long id) {
         AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+
         return AppUserMapper.mapToDto(appUser);
     }
+
 
     @Override
     public void deleteById(Long id) {
@@ -44,6 +54,7 @@ public class  AppUserServiceImpl implements AppUserService {
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
         userRepository.deleteById(id);
     }
+
 
     @Override
     public PageDtoAppUser getAllUsersByPages(int pageNumber, int pageSize, String sortBy, String sortDirection) {
