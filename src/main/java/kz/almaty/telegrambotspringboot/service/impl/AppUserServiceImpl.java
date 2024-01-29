@@ -5,7 +5,9 @@ import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
 import kz.almaty.telegrambotspringboot.enums.UserState;
 import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
 import kz.almaty.telegrambotspringboot.mapper.AppUserMapper;
+import kz.almaty.telegrambotspringboot.mapper.MapStructUserMapper;
 import kz.almaty.telegrambotspringboot.model.AppUser;
+import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
 import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
@@ -31,19 +33,12 @@ public class  AppUserServiceImpl implements AppUserService {
     private final AppUserRepository userRepository;
     private final TelegramUserMessageRepository telegramUserMessageRepository;
 
-//    @Override
-//    public AppUserDto findAppUserByTelegramUserId(Long id) {
-//        AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
-//                -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
-//        return AppUserMapper.mapToDto(appUser);
-//    }
-
-
     @Override
     public AppUserDto findAppUserByTelegramUserId(Long id) {
         AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
-
+        List<TelegramUserMessage> messages = telegramUserMessageRepository.findAllByTelegramUserId(id);
+        appUser.setTelegramUserMessages(messages);
         return AppUserMapper.mapToDto(appUser);
     }
 
