@@ -58,8 +58,12 @@ public class  AppUserServiceImpl implements AppUserService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<AppUser> appUsers = userRepository.findAll(pageable);
         List<AppUser> content = userRepository.findAll();
+
+        List<TelegramUserMessage> messages = telegramUserMessageRepository.findAll();
+
         return PageDtoAppUser.builder()
                 .content(content)
+                .messages(messages)
                 .pageNumber(appUsers.getNumber())
                 .pageSize(appUsers.getSize())
                 .pageSize(appUsers.getSize())
@@ -84,6 +88,16 @@ public class  AppUserServiceImpl implements AppUserService {
             var chatId = message.getChatId();
             var chat = message.getChat();
 
+//            AppUser appUser = new AppUser();
+//            appUser.setTelegramUserId(chatId);
+//            appUser.setFirstName(chat.getFirstName());
+//            appUser.setLastName(chat.getLastName());
+//            appUser.setUsername(chat.getUserName());
+//            appUser.setIsActive(true);
+//            appUser.setState(UserState.SUBSCRIBED);
+//            userRepository.save(appUser);
+
+
             AppUser appUser = new AppUser();
             appUser.setTelegramUserId(chatId);
             appUser.setFirstName(chat.getFirstName());
@@ -91,7 +105,11 @@ public class  AppUserServiceImpl implements AppUserService {
             appUser.setUsername(chat.getUserName());
             appUser.setIsActive(true);
             appUser.setState(UserState.SUBSCRIBED);
-            userRepository.save(appUser);
+
+//            AppUser savedAppUser = userRepository.save(appUser);
+            AppUserDto savedAppUserDto = AppUserMapper.mapToDto(appUser);
+            AppUser appUserSavedAsDto = AppUserMapper.mapToEntity(savedAppUserDto);
+            userRepository.save(appUserSavedAsDto);
         }
     }
 

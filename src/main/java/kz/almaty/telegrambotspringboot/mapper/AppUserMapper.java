@@ -18,7 +18,7 @@ public class AppUserMapper {
                 .build();
     }
 
-    public static AppUser mapToDto(AppUserDto appUserDto) {
+    public static AppUser mapToEntity(AppUserDto appUserDto) {
         return AppUser.builder()
                 .id(appUserDto.getId())
                 .telegramUserId(appUserDto.getTelegramUserId())

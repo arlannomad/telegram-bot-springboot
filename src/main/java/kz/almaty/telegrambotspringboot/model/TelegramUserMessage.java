@@ -1,5 +1,6 @@
 package kz.almaty.telegrambotspringboot.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class TelegramUserMessage {
     private String telegramUserMessageRequest;
     @Column(columnDefinition = "TEXT")
     private String telegramUserMessageResponse;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "message_id")
     private AppUser user;

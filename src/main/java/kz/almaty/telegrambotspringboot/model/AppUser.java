@@ -1,6 +1,7 @@
 package kz.almaty.telegrambotspringboot.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import kz.almaty.telegrambotspringboot.enums.UserState;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class AppUser {
     private Boolean isActive;
     @Enumerated(EnumType.STRING)
     private UserState state;
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<TelegramUserMessage> telegramUserMessages;
