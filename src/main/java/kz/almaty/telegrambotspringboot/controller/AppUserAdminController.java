@@ -48,4 +48,12 @@ public class AppUserAdminController {
     public String viewHomePage(Model model) {
         return findPaginated(1, "username", "asc", model);
     }
+
+    @GetMapping("/deleteEmployee/{id}")
+    public String deleteEmployee(@PathVariable (value = "id") long id) {
+
+        // call delete employee method
+        this.appUserService.deleteByChatId(id);
+        return "redirect:/";
+    }
 }
