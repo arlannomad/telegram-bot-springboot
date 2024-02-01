@@ -28,7 +28,7 @@ public class AppUserAdminController {
         int pageSize = 5;
 
         Page<AppUser> page = appUserService.findPaginated(pageNo, pageSize, sortField, sortDir);
-        List<AppUser> listEmployees = page.getContent();
+        List<AppUser> users = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -38,7 +38,7 @@ public class AppUserAdminController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
-        model.addAttribute("listEmployees", listEmployees);
+        model.addAttribute("users", users);
         return "index";
     }
 
