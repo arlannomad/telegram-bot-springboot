@@ -3,13 +3,18 @@ package kz.almaty.telegrambotspringboot.controller;
 
 import kz.almaty.telegrambotspringboot.dto.AppUserDto;
 import kz.almaty.telegrambotspringboot.dto.PageDtoAppUser;
+import kz.almaty.telegrambotspringboot.model.AppUser;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
 
 import static kz.almaty.telegrambotspringboot.utils.AppConstants.*;
 

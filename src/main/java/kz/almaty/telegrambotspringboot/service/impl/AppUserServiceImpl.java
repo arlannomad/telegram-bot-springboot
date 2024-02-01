@@ -111,4 +111,13 @@ public class  AppUserServiceImpl implements AppUserService {
         AppUser appUser = userRepository.findAppUserByTelegramUserId(chatId).get();
         userRepository.delete(appUser);
     }
+
+    @Override
+    public Page<AppUser> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.userRepository.findAll(pageable);
+    }
 }
