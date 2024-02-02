@@ -1,7 +1,8 @@
-package kz.almaty.telegrambotspringboot.controller;
+package kz.almaty.telegrambotspringboot.controller.admin_panel;
 
 
 import kz.almaty.telegrambotspringboot.model.AppUser;
+import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,20 +40,20 @@ public class AppUserAdminController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("users", users);
-        return "index";
+        return "users";
     }
 
-
-    // display list of employees
+     //display list of users
     @GetMapping("/")
     public String viewHomePage(Model model) {
         return findPaginated(1, "username", "asc", model);
     }
 
+
     @GetMapping("/deleteEmployee/{id}")
     public String deleteEmployee(@PathVariable (value = "id") long id) {
 
-        // call delete employee method
+        // call delete user method
         this.appUserService.deleteByChatId(id);
         return "redirect:/";
     }

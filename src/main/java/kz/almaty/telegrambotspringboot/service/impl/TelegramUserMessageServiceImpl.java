@@ -78,4 +78,13 @@ public class TelegramUserMessageServiceImpl implements TelegramUserMessageServic
         return telegramUserMessageRepository.findAllByTelegramUserId(id);
     }
 
+    @Override
+    public Page<TelegramUserMessage> findMessagePaginated(int pageNo, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+        return this.telegramUserMessageRepository.findAll(pageable);
+    }
+
 }
