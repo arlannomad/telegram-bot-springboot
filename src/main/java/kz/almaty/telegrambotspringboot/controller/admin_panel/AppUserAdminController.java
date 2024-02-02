@@ -49,12 +49,18 @@ public class AppUserAdminController {
         return findPaginated(1, "username", "asc", model);
     }
 
-
     @GetMapping("/deleteEmployee/{id}")
     public String deleteEmployee(@PathVariable (value = "id") long id) {
 
         // call delete user method
         this.appUserService.deleteByChatId(id);
         return "redirect:/";
+    }
+
+    //http://localhost:8080/link-expression
+    @GetMapping("link-expression")
+    public String linkExpression(Model model) {
+        model.addAttribute("id", 1);
+        return "link-expression";
     }
 }
