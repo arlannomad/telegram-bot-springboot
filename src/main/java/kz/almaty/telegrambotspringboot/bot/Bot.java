@@ -7,6 +7,7 @@ import kz.almaty.telegrambotspringboot.exception.GlobalApiException;
 import kz.almaty.telegrambotspringboot.model.TelegramUserMessage;
 import kz.almaty.telegrambotspringboot.repository.AppUserRepository;
 import kz.almaty.telegrambotspringboot.repository.TelegramUserMessageRepository;
+import kz.almaty.telegrambotspringboot.service.AIService;
 import kz.almaty.telegrambotspringboot.service.AppUserService;
 import kz.almaty.telegrambotspringboot.service.TelegramUserMessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class Bot extends TelegramLongPollingBot {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AIService aiService;
 
     public Bot(@Value("${bot.token}") String token) {
         super(token);
@@ -95,7 +99,8 @@ public class Bot extends TelegramLongPollingBot {
 //                    appUserService.deleteByChatId(message.getChatId());
                     telegramUserMessageService.addMessage(message);
                     SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText(chatGptResponse(text));
+                    sendMessage.setText(chatGptResponse(aiService.getJoke(text)));
+//                    sendMessage.setText(chatGptResponse(text));
                     addChatGptResponseText(message);
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());
