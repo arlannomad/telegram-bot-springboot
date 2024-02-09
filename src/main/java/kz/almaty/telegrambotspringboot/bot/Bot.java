@@ -99,8 +99,8 @@ public class Bot extends TelegramLongPollingBot {
 //                    appUserService.deleteByChatId(message.getChatId());
                     telegramUserMessageService.addMessage(message);
                     SendMessage sendMessage = new SendMessage();
-                    sendMessage.setText(chatGptResponse(aiService.getJoke(text)));
-//                    sendMessage.setText(chatGptResponse(text));
+//                    sendMessage.setText(chatGptResponse(aiService.getPrompt(text)));
+                    sendMessage.setText(chatGptResponse(text));
                     addChatGptResponseText(message);
                     sendMessage.setParseMode(ParseMode.MARKDOWN);
                     sendMessage.setChatId(message.getChatId());

@@ -12,7 +12,7 @@ public class AIServiceImpl implements AIService {
     @Autowired
     AiClient aiClient;
     @Override
-    public String getJoke(String prompt) {
+    public String getPrompt(String prompt) {
         PromptTemplate promptTemplate = new PromptTemplate("""
                 You are an interpreter
                 You will be provided with a prompt {prompt}
