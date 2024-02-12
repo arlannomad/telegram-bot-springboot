@@ -30,12 +30,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class  AppUserServiceImpl implements AppUserService {
 
-    private final AppUserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final TelegramUserMessageRepository telegramUserMessageRepository;
 
     @Override
     public AppUserDto findAppUserByTelegramUserId(Long id) {
-        AppUser appUser = userRepository.findAppUserByTelegramUserId(id).orElseThrow(()
+        AppUser appUser = appUserRepository.findAppUserByTelegramUserId(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
         List<TelegramUserMessage> messages = telegramUserMessageRepository.findAllByTelegramUserId(id);
         appUser.setTelegramUserMessages(messages);
@@ -45,9 +45,9 @@ public class  AppUserServiceImpl implements AppUserService {
 
     @Override
     public void deleteById(Long id) {
-        userRepository.findById(id).orElseThrow(()
+        appUserRepository.findById(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
-        userRepository.deleteById(id);
+        appUserRepository.deleteById(id);
     }
 
 
@@ -56,8 +56,8 @@ public class  AppUserServiceImpl implements AppUserService {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-        Page<AppUser> appUsers = userRepository.findAll(pageable);
-        List<AppUser> content = userRepository.findAll();
+        Page<AppUser> appUsers = appUserRepository.findAll(pageable);
+        List<AppUser> content = appUserRepository.findAll();
 
         List<TelegramUserMessage> messages = telegramUserMessageRepository.findAll();
 
@@ -75,14 +75,14 @@ public class  AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto findById(Long id) {
-        AppUser appUser = userRepository.findById(id).orElseThrow(()
+        AppUser appUser = appUserRepository.findById(id).orElseThrow(()
                 -> new GlobalApiException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
         return AppUserMapper.mapToDto(appUser);
     }
 
     @Override
     public void register(Message message) {
-        if (userRepository.findAppUserByTelegramUserId(message.getChatId()).isPresent()) {
+        if (appUserRepository.findAppUserByTelegramUserId(message.getChatId()).isPresent()) {
             throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User " + message.getFrom() + " already registered");
         } else {
             var chatId = message.getChatId();
@@ -98,18 +98,18 @@ public class  AppUserServiceImpl implements AppUserService {
 
             AppUserDto savedAppUserDto = AppUserMapper.mapToDto(appUser);
             AppUser appUserSavedAsDto = AppUserMapper.mapToEntity(savedAppUserDto);
-            userRepository.save(appUserSavedAsDto);
+            appUserRepository.save(appUserSavedAsDto);
         }
     }
 
     @Override
     public void deleteByChatId(Long chatId) {
-        boolean isChatIdExists = userRepository.existsAppUsersByTelegramUserId(chatId);
+        boolean isChatIdExists = appUserRepository.existsAppUsersByTelegramUserId(chatId);
         if (!isChatIdExists) {
             throw new GlobalApiException(HttpStatus.BAD_REQUEST, "User " + chatId + " NOT FOUND");
         }
-        AppUser appUser = userRepository.findAppUserByTelegramUserId(chatId).get();
-        userRepository.delete(appUser);
+        AppUser appUser = appUserRepository.findAppUserByTelegramUserId(chatId).get();
+        appUserRepository.delete(appUser);
     }
 
     @Override
@@ -118,6 +118,6 @@ public class  AppUserServiceImpl implements AppUserService {
                 Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        return this.userRepository.findAll(pageable);
+        return this.appUserRepository.findAll(pageable);
     }
 }
