@@ -49,7 +49,7 @@ public class AppUserAdminController {
         return findPaginated(1, "username", "asc", model);
     }
 
-    @GetMapping("/deleteEmployee/{id}")
+    @GetMapping("/deleteUser/{id}")
     public String deleteEmployee(@PathVariable (value = "id") long id) {
 
         // call delete user method
