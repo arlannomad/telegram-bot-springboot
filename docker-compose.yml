@@ -1,0 +1,31 @@
+services:
+  postgres:
+    container_name: telegram-bot-springboot
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: post4911631
+      POSTGRES_DB: telegram-bot-springboot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgres/data
+    networks:
+      - telegram-bot-springboot-network
+  telegram-bot-springboot-app:
+    container_name: telegram-bot-springboot-app
+    image: telegram-bot-springboot
+    ports:
+      - "8088:8080"
+    networks:
+      - telegram-bot-springboot-network
+
+volumes:
+      postgres:
+networks:
+  telegram-bot-springboot-network:
+    driver: bridge
+
+
+
+
